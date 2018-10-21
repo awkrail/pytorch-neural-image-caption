@@ -18,6 +18,7 @@ Output:
     ])]
 """
 parser = argparse.ArgumentParser(description="indicate onput path dir")
+parser.add_argument("--input_path", "-i", type=str, required=True)
 parser.add_argument("--output_path", "-o", type=str, required=True)
 args = parser.parse_args()
 
@@ -38,7 +39,7 @@ for dataType in dataTypes:
     img = coco.loadImgs(imgId)[0]
     filename = img["file_name"]
     captions = coco_caps.loadAnns(img["id"])
-    image = io.imread(dataDir + "/" + dataType + "/" + filename)
+    image = io.imread(args.input_path)
     output_dict = {
       "image" : image,
       "captions" : captions
