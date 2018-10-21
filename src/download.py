@@ -44,5 +44,5 @@ for dataType in dataTypes:
       "image" : image,
       "captions" : captions
     }
-    with open(args.output_path + imgId + ".pkl", "wb") as f:
+    with open(args.output_path + str(imgId) + ".pkl", "wb") as f:
       pickle.dump(output_dict, f)
