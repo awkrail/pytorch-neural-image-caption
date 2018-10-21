@@ -39,7 +39,7 @@ for dataType in dataTypes:
     img = coco.loadImgs(imgId)[0]
     filename = img["file_name"]
     captions = coco_caps.loadAnns(img["id"])
-    image = io.imread(args.input_path)
+    image = io.imread(args.input_path + dataType + "/" + filename)
     output_dict = {
       "image" : image,
       "captions" : captions
