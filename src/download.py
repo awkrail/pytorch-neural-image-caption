@@ -3,6 +3,7 @@ import numpy as np
 import skimage.io as io
 import matplotlib.pyplot as plt
 import pickle
+import argparse
 
 """
 Parse MSCOCO Dataset
@@ -16,6 +17,9 @@ Output:
       captions..
     ])]
 """
+parser = argparse.ArgumentParser(description="indicate onput path dir")
+parser.add_argument("--output_path", "-o", type=str, requred=True)
+args = parser.parse_args()
 
 dataTypes = ["train2017", "val2017"]
 dataDir = "../data"
@@ -39,5 +43,5 @@ for dataType in dataTypes:
       "image" : image,
       "captions" : captions
     }
-    with open(dataDir + "pickles/" + imgId + ".pkl", "wb") as f:
-      pickle.dumP(output_dict, f)
+    with open(args.output_path + imgId + ".pkl", "wb") as f:
+      pickle.dump(output_dict, f)
