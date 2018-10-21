@@ -35,10 +35,12 @@ for dataType in dataTypes:
   catIds = coco.getCatIds()
   imgIds = coco.getImgIds()
   imgIds = coco.getImgIds(imgIds = imgIds)
-  for imgId in imgIds:
+  for imgId in sorted(imgIds):
     img = coco.loadImgs(imgId)[0]
     filename = img["file_name"]
-    captions = coco_caps.loadAnns(img["id"])
+    annIds = coco_caps.getAnnIds(imgIds=img["id"])
+    anns = coco_caps.loadAnns(annIds)
+    captions = [anns["caption"] for anns in annDict]
     image = io.imread(args.input_path + dataType + "/" + filename)
     output_dict = {
       "image" : image,
