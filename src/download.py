@@ -19,13 +19,19 @@ Output:
 """
 parser = argparse.ArgumentParser(description="indicate onput path dir")
 parser.add_argument("--input_path", "-i", type=str, required=True)
-parser.add_argument("--output_path", "-o", type=str, required=True)
+parser.add_argument("--output_train_path", "-o_train", type=str, required=True)
+parser.add_argument("--output_val_path", "-o_val", type=str, required=True)
 args = parser.parse_args()
 
 dataTypes = ["train2017", "val2017"]
 dataDir = "../data"
 
 for dataType in dataTypes:
+  if dataType == "train2017":
+    output_path = args.output_train_path
+  else:
+    output_path = args.output_val_path
+
   annFile = "{}/annotations/instances_{}.json".format(dataDir, dataType)
   capFile = '{}/annotations/captions_{}.json'.format(dataDir,dataType)
   coco = COCO(annFile)
@@ -40,11 +46,13 @@ for dataType in dataTypes:
     filename = img["file_name"]
     annIds = coco_caps.getAnnIds(imgIds=img["id"])
     anns = coco_caps.loadAnns(annIds)
-    captions = [anns["caption"] for annDict in anns]
+    captions = [annDict["caption"] for annDict in anns]
     image = io.imread(args.input_path + dataType + "/" + filename)
     output_dict = {
       "image" : image,
       "captions" : captions
     }
+
     with open(args.output_path + str(imgId) + ".pkl", "wb") as f:
       pickle.dump(output_dict, f)
+
