@@ -18,7 +18,7 @@ Output:
     ])]
 """
 parser = argparse.ArgumentParser(description="indicate onput path dir")
-parser.add_argument("--output_path", "-o", type=str, requred=True)
+parser.add_argument("--output_path", "-o", type=str, required=True)
 args = parser.parse_args()
 
 dataTypes = ["train2017", "val2017"]
