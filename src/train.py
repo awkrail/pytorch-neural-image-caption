@@ -4,7 +4,7 @@ from torchvision import models
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from voc import Voc
-
+import argparse
 
 def indexesFromSentence(voc, sentence):
     return [voc.SOS_token] + [voc.word2index[word] for word in sentence.split(" ")] + [voc.EOS_token]
@@ -28,9 +28,20 @@ def inputVar():
 
 
 if __name__ == "__main__":
+    # args
+    parser = argparse.ArgumentParser(description="input and annFile Path to training mscoco")
+    parser.add_argument("--input_path", "-i", type=str, required=True)
+    parser.add_argument("--ann_path", "-ann", type=str, required=True)
+    args = parser.parse_args()
+
+    # hyper parameters
+    hidden_size = 512
+    batch_size = 32
+    num_words = 50 # TODO : change
+
     # define DataLoader
-    cap = dset.CocoCaptions(root = "/mnt/mqs02/data/nishimura/mscoco/train2017/",
-                            annFile = "../data/annotations/captions_train2017.json",
+    cap = dset.CocoCaptions(root = args.input_path,
+                            annFile = args.ann_path,
                             transform = transforms.Compose([
                                     transforms.Resize((224, 224)),
                                     transforms.ToTensor()
