@@ -41,18 +41,24 @@ for dataType in dataTypes:
   catIds = coco.getCatIds()
   imgIds = coco.getImgIds()
   imgIds = coco.getImgIds(imgIds = imgIds)
+  all_captions = []
   for imgId in sorted(imgIds):
     img = coco.loadImgs(imgId)[0]
     filename = img["file_name"]
     annIds = coco_caps.getAnnIds(imgIds=img["id"])
     anns = coco_caps.loadAnns(annIds)
-    captions = [annDict["caption"] for annDict in anns]
+    captions = [annDict["caption"].lower() for annDict in anns]
+    for caption in captions:
+        all_captions.append(caption)
     image = io.imread(args.input_path + dataType + "/" + filename)
+    if image.shape[0] <= 32 or image.shape[1] <= 32:
+        continue
     output_dict = {
-      "image" : image,
-      "captions" : captions
-    }
-
-    with open(args.output_path + str(imgId) + ".pkl", "wb") as f:
-      pickle.dump(output_dict, f)
-
+            "image" : image,
+            "captions" : captions
+            }
+    with open(output_path + str(imgId) + ".pkl", "wb") as f:
+        pickle.dump(output_dict, f)
+    print(imgId, ", done!")
+  with open(input_path + "/" + dataType + "_captions.pkl", "wb") as f:
+      pickle.dump(all_captions, f)
